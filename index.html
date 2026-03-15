@@ -5,46 +5,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Consulta Cédula Ecuador PRO</title>
+<title>Consulta Cédula Ecuador | Grupo Consulteg</title>
 
 <style>
 
 body{
-font-family:Arial;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
 margin:0;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
+padding:0;
+}
+
+header{
+background:#0d1b2a;
+color:white;
+padding:20px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
 }
 
 .container{
+max-width:900px;
+margin:30px auto;
 background:white;
-width:520px;
-padding:30px;
-border-radius:12px;
-box-shadow:0 15px 35px rgba(0,0,0,0.3);
-}
-
-h1{
-text-align:center;
-margin-bottom:20px;
+padding:25px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
 input{
 width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:12px;
+padding:12px;
+margin-top:10px;
 border-radius:6px;
 border:1px solid #ccc;
+font-size:16px;
 }
 
 button{
+margin-top:10px;
 width:100%;
 padding:12px;
-background:#203a43;
+background:#1e3c72;
 color:white;
 border:none;
 border-radius:6px;
@@ -53,25 +56,46 @@ cursor:pointer;
 }
 
 button:hover{
-background:#2c5364;
+background:#2a5298;
 }
 
-.result{
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
 margin-top:20px;
+}
+
+.card{
 background:#f5f5f5;
 padding:15px;
-border-radius:6px;
-font-size:14px;
+border-radius:8px;
+}
+
+.card h3{
+margin-top:0;
+border-bottom:1px solid #ddd;
+padding-bottom:5px;
+}
+
+.data{
+margin:5px 0;
 }
 
 textarea{
 width:100%;
-height:150px;
-margin-top:15px;
+height:200px;
+margin-top:20px;
 }
 
-.data{
-margin-bottom:5px;
+.success{
+color:green;
+font-weight:bold;
+}
+
+.error{
+color:red;
+font-weight:bold;
 }
 
 </style>
@@ -80,16 +104,70 @@ margin-bottom:5px;
 
 <body>
 
+<header>
+Consulta Cédula Ecuador 🇪🇨 | Grupo Consulteg
+</header>
+
 <div class="container">
 
-<h1>Consulta Cédula Ecuador 🇪🇨</h1>
-
-<label>Cédula</label>
-<input id="cedula">
+<label>Ingrese cédula</label>
+<input id="cedula" maxlength="10" placeholder="Ej: 1726878505">
 
 <button onclick="consultar()">Consultar</button>
 
-<div id="datos" class="result"></div>
+<div id="estado"></div>
+
+<div class="grid">
+
+<div class="card">
+<h3>Datos Personales</h3>
+
+<div class="data"><b>Cédula:</b> <span id="cedula_r"></span></div>
+<div class="data"><b>Nombre completo:</b> <span id="nombre"></span></div>
+<div class="data"><b>Nombres:</b> <span id="nombres"></span></div>
+<div class="data"><b>Apellidos:</b> <span id="apellidos"></span></div>
+<div class="data"><b>Sexo:</b> <span id="sexo"></span></div>
+<div class="data"><b>Edad:</b> <span id="edad"></span></div>
+<div class="data"><b>Fecha nacimiento:</b> <span id="nacimiento"></span></div>
+
+</div>
+
+<div class="card">
+<h3>Ubicación</h3>
+
+<div class="data"><b>Provincia nacimiento:</b> <span id="provincia"></span></div>
+<div class="data"><b>Cantón nacimiento:</b> <span id="canton"></span></div>
+<div class="data"><b>Parroquia nacimiento:</b> <span id="parroquia"></span></div>
+
+<div class="data"><b>Provincia domicilio:</b> <span id="prov_dom"></span></div>
+<div class="data"><b>Cantón domicilio:</b> <span id="can_dom"></span></div>
+<div class="data"><b>Parroquia domicilio:</b> <span id="par_dom"></span></div>
+
+</div>
+
+<div class="card">
+<h3>Información Civil</h3>
+
+<div class="data"><b>Estado civil:</b> <span id="estado_civil"></span></div>
+<div class="data"><b>Nacionalidad:</b> <span id="nacionalidad"></span></div>
+<div class="data"><b>Profesión:</b> <span id="profesion"></span></div>
+<div class="data"><b>Instrucción:</b> <span id="instruccion"></span></div>
+<div class="data"><b>Fecha cedulación:</b> <span id="cedulacion"></span></div>
+
+</div>
+
+<div class="card">
+<h3>Familia</h3>
+
+<div class="data"><b>Padre:</b> <span id="padre"></span></div>
+<div class="data"><b>Madre:</b> <span id="madre"></span></div>
+<div class="data"><b>Cónyuge:</b> <span id="conyuge"></span></div>
+
+</div>
+
+</div>
+
+<h3>Respuesta completa API</h3>
 
 <textarea id="json"></textarea>
 
@@ -129,25 +207,12 @@ const estadoCivil={
 2:"CASADO",
 3:"DIVORCIADO",
 4:"VIUDO",
-5:"UNION DE HECHO",
+5:"UNIÓN DE HECHO",
 6:"SOLTERO"
 }
 
-function region(prov){
-
-if([7,8,9,12,13,23,24].includes(prov))
-return "Costa"
-
-if([1,2,3,4,5,6,10,11,17,18].includes(prov))
-return "Sierra"
-
-if([14,15,16,19,21,22].includes(prov))
-return "Amazonía"
-
-if(prov==20)
-return "Galápagos"
-
-return "Desconocida"
+function txt(v){
+return v ? v : "No disponible"
 }
 
 async function consultar(){
@@ -178,43 +243,37 @@ document.getElementById("json").value=text
 
 const j=JSON.parse(text)
 
-const prov=parseInt(j.provNacimiento)
+document.getElementById("estado").innerHTML="<p class='success'>Consulta realizada</p>"
 
-const html=`
+document.getElementById("cedula_r").innerText=txt(j.cedula)
+document.getElementById("nombre").innerText=txt(j.nombreCompleto)
+document.getElementById("nombres").innerText=txt(j.nombres)
+document.getElementById("apellidos").innerText=txt(j.apellidos)
+document.getElementById("sexo").innerText=txt(j.sexo)
+document.getElementById("edad").innerText=txt(j.edad)
+document.getElementById("nacimiento").innerText=txt(j.fechaNacimiento)
 
-<div class="data"><b>Cédula:</b> ${j.cedula}</div>
-<div class="data"><b>Nombre:</b> ${j.nombreCompleto}</div>
-<div class="data"><b>Nombres:</b> ${j.nombres}</div>
-<div class="data"><b>Apellidos:</b> ${j.apellidos}</div>
+document.getElementById("provincia").innerText=provincias[j.provNacimiento] || j.provNacimiento
+document.getElementById("canton").innerText=txt(j.canNacimiento)
+document.getElementById("parroquia").innerText=txt(j.parNacimiento)
 
-<hr>
+document.getElementById("prov_dom").innerText=provincias[j.provDomicilio] || j.provDomicilio
+document.getElementById("can_dom").innerText=txt(j.canDomicilio)
+document.getElementById("par_dom").innerText=txt(j.parDomicilio)
 
-<div class="data"><b>Sexo:</b> ${j.sexo}</div>
-<div class="data"><b>Edad:</b> ${j.edad}</div>
-<div class="data"><b>Fecha nacimiento:</b> ${j.fechaNacimiento}</div>
+document.getElementById("estado_civil").innerText=estadoCivil[j.estadoCivilId] || "No disponible"
+document.getElementById("nacionalidad").innerText="ECUATORIANA"
+document.getElementById("profesion").innerText=txt(j.profesion)
+document.getElementById("instruccion").innerText=txt(j.instruccion)
+document.getElementById("cedulacion").innerText=txt(j.fechaCedulacion)
 
-<hr>
-
-<div class="data"><b>Provincia nacimiento:</b> ${provincias[prov]}</div>
-<div class="data"><b>Región:</b> ${region(prov)}</div>
-
-<hr>
-
-<div class="data"><b>Estado civil:</b> ${estadoCivil[j.estadoCivilId] || "No disponible"}</div>
-<div class="data"><b>Nacionalidad:</b> ECUATORIANA</div>
-
-<hr>
-
-<div class="data"><b>Padre:</b> ${j.nombrePadre || "No disponible"}</div>
-<div class="data"><b>Madre:</b> ${j.nombreMadre || "No disponible"}</div>
-
-`
-
-document.getElementById("datos").innerHTML=html
+document.getElementById("padre").innerText=txt(j.nombrePadre)
+document.getElementById("madre").innerText=txt(j.nombreMadre)
+document.getElementById("conyuge").innerText=txt(j.conyuge)
 
 }catch(e){
 
-document.getElementById("datos").innerHTML="Error al consultar"
+document.getElementById("estado").innerHTML="<p class='error'>Error al consultar</p>"
 
 }
 
