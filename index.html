@@ -25,7 +25,7 @@ font-weight:bold;
 }
 
 .container{
-max-width:950px;
+max-width:800px;
 margin:30px auto;
 background:white;
 padding:25px;
@@ -58,17 +58,11 @@ button:hover{
 background:#457b9d;
 }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-margin-top:20px;
-}
-
 .card{
 background:#f7f7f7;
-padding:15px;
+padding:20px;
 border-radius:8px;
+margin-top:20px;
 }
 
 .card h3{
@@ -78,8 +72,8 @@ padding-bottom:5px;
 }
 
 .data{
-margin:6px 0;
-font-size:14px;
+margin:8px 0;
+font-size:15px;
 }
 
 .success{
@@ -124,9 +118,8 @@ Consulta Cédula Ecuador 🇪🇨 | Grupo Consulteg
 
 <div id="estado"></div>
 
-<div class="grid">
-
 <div class="card">
+
 <h3>Datos Personales</h3>
 
 <div class="data"><b>Cédula:</b> <span id="cedula_r"></span></div>
@@ -140,19 +133,7 @@ Consulta Cédula Ecuador 🇪🇨 | Grupo Consulteg
 </div>
 
 <div class="card">
-<h3>Ubicación</h3>
 
-<div class="data"><b>Provincia nacimiento:</b> <span id="provincia"></span></div>
-<div class="data"><b>Cantón nacimiento:</b> <span id="canton"></span></div>
-<div class="data"><b>Parroquia nacimiento:</b> <span id="parroquia"></span></div>
-
-<div class="data"><b>Provincia domicilio:</b> <span id="prov_dom"></span></div>
-<div class="data"><b>Cantón domicilio:</b> <span id="can_dom"></span></div>
-<div class="data"><b>Parroquia domicilio:</b> <span id="par_dom"></span></div>
-
-</div>
-
-<div class="card">
 <h3>Información Civil</h3>
 
 <div class="data"><b>Estado civil:</b> <span id="estado_civil"></span></div>
@@ -160,17 +141,6 @@ Consulta Cédula Ecuador 🇪🇨 | Grupo Consulteg
 <div class="data"><b>Profesión:</b> <span id="profesion"></span></div>
 <div class="data"><b>Instrucción:</b> <span id="instruccion"></span></div>
 <div class="data"><b>Fecha cedulación:</b> <span id="cedulacion"></span></div>
-
-</div>
-
-<div class="card">
-<h3>Familia</h3>
-
-<div class="data"><b>Padre:</b> <span id="padre"></span></div>
-<div class="data"><b>Madre:</b> <span id="madre"></span></div>
-<div class="data"><b>Cónyuge:</b> <span id="conyuge"></span></div>
-
-</div>
 
 </div>
 
@@ -184,33 +154,6 @@ Sistema de consulta | Grupo Consulteg
 </div>
 
 <script>
-
-const provincias={
-1:"Azuay",
-2:"Bolívar",
-3:"Cañar",
-4:"Carchi",
-5:"Cotopaxi",
-6:"Chimborazo",
-7:"El Oro",
-8:"Esmeraldas",
-9:"Guayas",
-10:"Imbabura",
-11:"Loja",
-12:"Los Ríos",
-13:"Manabí",
-14:"Morona Santiago",
-15:"Napo",
-16:"Pastaza",
-17:"Pichincha",
-18:"Tungurahua",
-19:"Zamora Chinchipe",
-20:"Galápagos",
-21:"Sucumbíos",
-22:"Orellana",
-23:"Santo Domingo",
-24:"Santa Elena"
-}
 
 const estadoCivil={
 1:"Soltero",
@@ -263,23 +206,11 @@ document.getElementById("sexo").innerText=txt(j.sexo)
 document.getElementById("edad").innerText=txt(j.edad)
 document.getElementById("nacimiento").innerText=txt(j.fechaNacimiento)
 
-document.getElementById("provincia").innerText=provincias[j.provNacimiento] || "No disponible"
-document.getElementById("canton").innerText="Código "+txt(j.canNacimiento)
-document.getElementById("parroquia").innerText="Código "+txt(j.parNacimiento)
-
-document.getElementById("prov_dom").innerText=provincias[j.provDomicilio] || "No disponible"
-document.getElementById("can_dom").innerText="Código "+txt(j.canDomicilio)
-document.getElementById("par_dom").innerText="Código "+txt(j.parDomicilio)
-
 document.getElementById("estado_civil").innerText=estadoCivil[j.estadoCivilId] || "No disponible"
 document.getElementById("nacionalidad").innerText="ECUATORIANA"
 document.getElementById("profesion").innerText=txt(j.profesion)
 document.getElementById("instruccion").innerText=txt(j.instruccion)
 document.getElementById("cedulacion").innerText=txt(j.fechaCedulacion)
-
-document.getElementById("padre").innerText=txt(j.nombrePadre)
-document.getElementById("madre").innerText=txt(j.nombreMadre)
-document.getElementById("conyuge").innerText=txt(j.conyuge)
 
 }catch(e){
 
