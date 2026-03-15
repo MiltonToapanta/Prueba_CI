@@ -1,163 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>API Cédula Ecuador</title>
-    
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Cédula Ecuador</title>
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    #output {
-        margin-top: 20px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;
-    }
+<title>Consulta Cédula Ecuador</title>
 
-    #cedulaInput,
-    #NombreText,
-    #ApellidoText {
-        padding: 8px;
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
+<style>
 
-    #responseText {
-        width: 100%;
-        height: 300px;
-        resize: none;
-    }
-    </style>
+body{
+font-family: Arial, Helvetica, sans-serif;
+background: linear-gradient(135deg,#1d3557,#457b9d);
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.container{
+background:white;
+padding:30px;
+border-radius:12px;
+width:450px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#1d3557;
+}
+
+label{
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+input:disabled{
+background:#f2f2f2;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#1d3557;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#457b9d;
+}
+
+#output{
+margin-top:15px;
+padding:10px;
+border-radius:6px;
+background:#f4f4f4;
+font-size:14px;
+}
+
+textarea{
+width:100%;
+height:160px;
+margin-top:15px;
+resize:none;
+}
+
+</style>
 
 </head>
 
 <body>
-    <h1>API Cédula Ecuador</h1>
 
-    <label for="cedulaInput">Ingresa la cédula (10 dígitos):</label>
-    <input type="text" id="cedulaInput" maxlength="10" placeholder="Cédula de 10 dígitos" />
+<div class="container">
 
-    <label for="NombreText">Nombre:</label>
-    <input type="text" id="NombreText" placeholder="Nombre" disabled />
+<h1>Consulta Cédula Ecuador 🇪🇨</h1>
 
-    <label for="ApellidoText">Apellido:</label>
-    <input type="text" id="ApellidoText" placeholder="Apellido" disabled />
+<label>Cédula</label>
+<input type="text" id="cedulaInput" maxlength="10" placeholder="Ingrese cédula">
 
-    <div id="output">
-        <p>Haz clic fuera del campo de cédula para enviar los datos si tiene 10 dígitos.</p>
-    </div>
+<label>Nombres</label>
+<input type="text" id="NombreText" disabled>
 
-    <br>
+<label>Apellidos</label>
+<input type="text" id="ApellidoText" disabled>
 
-    <label for="responseText">Respuesta completa del servidor:</label> <br> <br>
-    <textarea id="responseText" placeholder="Aquí se mostrará la información completa" readonly></textarea>
+<label>Provincia</label>
+<input type="text" id="ProvinciaText" disabled>
 
+<label>Región</label>
+<input type="text" id="RegionText" disabled>
 
-    <script>
-    // Seleccionar elementos del DOM
-    const cedulaInput = document.getElementById('cedulaInput');
-    const NombreText = document.getElementById('NombreText');
-    const ApellidoText = document.getElementById('ApellidoText');
-    const responseText = document.getElementById('responseText');
-    const output = document.getElementById('output');
+<button onclick="consultarCedula()">Consultar</button>
 
-    // Función para enviar datos con proxy (AllOrigins)
-    async function sendPostRequest(cedula) {
-        // URL del proxy público (AllOrigins)
-        const proxyUrl = 'https://infoplacas.herokuapp.com/';
-        // URL del servidor de destino
-        const targetUrl = 'https://si.secap.gob.ec/sisecap/logeo_web/json/busca_persona_registro_civil.php';
+<div id="output">
+Ingrese una cédula ecuatoriana de 10 dígitos.
+</div>
 
-        const postData = {
-            documento: cedula,
-            tipo: '1'
-        };
+<label>Respuesta completa del servidor</label>
+<textarea id="responseText" readonly></textarea>
 
-        try {
-            // Hacer la petición POST usando fetch con el proxy
-            const response = await fetch(proxyUrl + targetUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(postData)
-            });
+</div>
 
-            // Verificar si la respuesta fue exitosa
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`);
-            }
+<script>
 
-            // Obtener la respuesta en texto para depuración
-            const textResponse = await response.text();
+const provincias = {
+1:"Azuay",
+2:"Bolívar",
+3:"Cañar",
+4:"Carchi",
+5:"Cotopaxi",
+6:"Chimborazo",
+7:"El Oro",
+8:"Esmeraldas",
+9:"Guayas",
+10:"Imbabura",
+11:"Loja",
+12:"Los Ríos",
+13:"Manabí",
+14:"Morona Santiago",
+15:"Napo",
+16:"Pastaza",
+17:"Pichincha",
+18:"Tungurahua",
+19:"Zamora Chinchipe",
+20:"Galápagos",
+21:"Sucumbíos",
+22:"Orellana",
+23:"Santo Domingo",
+24:"Santa Elena"
+};
 
+function obtenerRegion(prov){
 
-            // Mostrar la respuesta completa en el textarea
-            responseText.value = textResponse;
+if(prov<=7 || prov==9 || prov==12 || prov==13 || prov==23 || prov==24)
+return "Costa";
 
-            // Verificar si la respuesta es vacía o no es válida JSON
-            if (!textResponse) {
-                throw new Error('La respuesta está vacía');
-            }
+if(prov>=1 && prov<=6 || prov==10 || prov==11 || prov==17 || prov==18)
+return "Sierra";
 
-            // Intentar convertir la respuesta a JSON
-            let data;
-            try {
-                data = JSON.parse(textResponse);
-                // Mostrar el JSON de manera ordenada en el textarea
-                responseText.value = JSON.stringify(data, null, 4);
-            } catch (jsonError) {
-                throw new Error('Error al analizar JSON: ' + jsonError.message);
-            }
+if(prov>=14 && prov<=16 || prov>=19 && prov<=22)
+return "Amazonía";
 
+if(prov==20)
+return "Galápagos";
 
-            // Asignar los valores de nombre y apellido a los campos correspondientes
-            if (data && data.nombres && data.apellidos) {
-                NombreText.value = data.nombres; // Asignar el nombre al input de nombre
-                ApellidoText.value = data.apellidos; // Asignar el apellido al input de apellido
-            } else {
-                throw new Error('Los datos de nombre y apellido no están disponibles.');
-            }
+return "Desconocida";
 
-        } catch (error) {
-            // Manejo de errores
-            output.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
-        }
-    }
+}
 
-    // Función que se ejecuta cuando el campo de entrada pierde el foco
-    function handleCedulaBlur() {
-        const cedula = cedulaInput.value.trim();
-        // Verificar si la cédula tiene exactamente 10 dígitos
-        if (cedula.length === 10 && !isNaN(cedula)) {
-            sendPostRequest(cedula);
-        } else {
-            output.innerHTML = `<p style="color: red;">Por favor ingresa una cédula válida de 10 dígitos.</p>`;
-        }
-    }
+function validarCedula(cedula){
 
-    // Asociar evento de "blur" al input de cédula (cuando el usuario hace clic fuera del campo)
-    cedulaInput.addEventListener('blur', handleCedulaBlur);
-    </script>
+if(!/^\d{10}$/.test(cedula)) return false;
+
+let provincia=parseInt(cedula.substring(0,2));
+if(provincia<1 || provincia>24) return false;
+
+let tercerDigito=parseInt(cedula[2]);
+if(tercerDigito>=6) return false;
+
+let coef=[2,1,2,1,2,1,2,1,2];
+let suma=0;
+
+for(let i=0;i<9;i++){
+
+let val=cedula[i]*coef[i];
+
+if(val>=10) val-=9;
+
+suma+=val;
+
+}
+
+let digitoVerificador=(10-(suma%10))%10;
+
+return digitoVerificador==cedula[9];
+
+}
+
+async function consultarCedula(){
+
+const cedula=document.getElementById("cedulaInput").value.trim();
+
+const nombres=document.getElementById("NombreText");
+const apellidos=document.getElementById("ApellidoText");
+const provinciaText=document.getElementById("ProvinciaText");
+const regionText=document.getElementById("RegionText");
+
+const output=document.getElementById("output");
+const responseText=document.getElementById("responseText");
+
+nombres.value="";
+apellidos.value="";
+provinciaText.value="";
+regionText.value="";
+responseText.value="";
+
+if(!validarCedula(cedula)){
+output.innerHTML="<span style='color:red'>Cédula ecuatoriana inválida</span>";
+return;
+}
+
+const proxy="https://infoplacas.herokuapp.com/";
+const target="https://si.secap.gob.ec/sisecap/logeo_web/json/busca_persona_registro_civil.php";
+
+const data=new URLSearchParams({
+documento:cedula,
+tipo:1
+});
+
+try{
+
+const response=await fetch(proxy+target,{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:data
+});
+
+if(!response.ok) throw new Error("Error en la solicitud");
+
+const text=await response.text();
+
+responseText.value=text;
+
+const json=JSON.parse(text);
+
+responseText.value=JSON.stringify(json,null,4);
+
+nombres.value=json.nombres || "";
+apellidos.value=json.apellidos || "";
+
+let codProvincia=parseInt(cedula.substring(0,2));
+
+provinciaText.value=provincias[codProvincia] || "Desconocida";
+
+regionText.value=obtenerRegion(codProvincia);
+
+output.innerHTML="<span style='color:green'>Consulta realizada correctamente</span>";
+
+}catch(error){
+
+output.innerHTML="<span style='color:red'>Error: "+error.message+"</span>";
+
+}
+
+}
+
+</script>
+
 </body>
-
-</html>
-  
-  </body>
-  
 </html>
