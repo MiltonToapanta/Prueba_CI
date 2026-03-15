@@ -11,13 +11,12 @@
 
 body{
 font-family:Arial, Helvetica, sans-serif;
-background:linear-gradient(135deg,#1e3c72,#2a5298);
 margin:0;
-padding:0;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 }
 
 header{
-background:#0d1b2a;
+background:#0b132b;
 color:white;
 padding:20px;
 text-align:center;
@@ -26,12 +25,12 @@ font-weight:bold;
 }
 
 .container{
-max-width:900px;
+max-width:950px;
 margin:30px auto;
 background:white;
 padding:25px;
 border-radius:10px;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
+box-shadow:0 15px 35px rgba(0,0,0,0.3);
 }
 
 input{
@@ -47,7 +46,7 @@ button{
 margin-top:10px;
 width:100%;
 padding:12px;
-background:#1e3c72;
+background:#1d3557;
 color:white;
 border:none;
 border-radius:6px;
@@ -56,7 +55,7 @@ cursor:pointer;
 }
 
 button:hover{
-background:#2a5298;
+background:#457b9d;
 }
 
 .grid{
@@ -67,7 +66,7 @@ margin-top:20px;
 }
 
 .card{
-background:#f5f5f5;
+background:#f7f7f7;
 padding:15px;
 border-radius:8px;
 }
@@ -79,13 +78,8 @@ padding-bottom:5px;
 }
 
 .data{
-margin:5px 0;
-}
-
-textarea{
-width:100%;
-height:200px;
-margin-top:20px;
+margin:6px 0;
+font-size:14px;
 }
 
 .success{
@@ -96,6 +90,19 @@ font-weight:bold;
 .error{
 color:red;
 font-weight:bold;
+}
+
+textarea{
+width:100%;
+height:200px;
+margin-top:20px;
+}
+
+footer{
+text-align:center;
+margin-top:20px;
+font-size:13px;
+color:#555;
 }
 
 </style>
@@ -110,7 +117,7 @@ Consulta Cédula Ecuador 🇪🇨 | Grupo Consulteg
 
 <div class="container">
 
-<label>Ingrese cédula</label>
+<label>Ingrese número de cédula</label>
 <input id="cedula" maxlength="10" placeholder="Ej: 1726878505">
 
 <button onclick="consultar()">Consultar</button>
@@ -168,8 +175,11 @@ Consulta Cédula Ecuador 🇪🇨 | Grupo Consulteg
 </div>
 
 <h3>Respuesta completa API</h3>
-
 <textarea id="json"></textarea>
+
+<footer>
+Sistema de consulta | Grupo Consulteg
+</footer>
 
 </div>
 
@@ -203,12 +213,12 @@ const provincias={
 }
 
 const estadoCivil={
-1:"SOLTERO",
-2:"CASADO",
-3:"DIVORCIADO",
-4:"VIUDO",
-5:"UNIÓN DE HECHO",
-6:"SOLTERO"
+1:"Soltero",
+2:"Casado",
+3:"Divorciado",
+4:"Viudo",
+5:"Unión de hecho",
+6:"Soltero"
 }
 
 function txt(v){
@@ -243,7 +253,7 @@ document.getElementById("json").value=text
 
 const j=JSON.parse(text)
 
-document.getElementById("estado").innerHTML="<p class='success'>Consulta realizada</p>"
+document.getElementById("estado").innerHTML="<p class='success'>Consulta realizada correctamente</p>"
 
 document.getElementById("cedula_r").innerText=txt(j.cedula)
 document.getElementById("nombre").innerText=txt(j.nombreCompleto)
@@ -253,13 +263,13 @@ document.getElementById("sexo").innerText=txt(j.sexo)
 document.getElementById("edad").innerText=txt(j.edad)
 document.getElementById("nacimiento").innerText=txt(j.fechaNacimiento)
 
-document.getElementById("provincia").innerText=provincias[j.provNacimiento] || j.provNacimiento
-document.getElementById("canton").innerText=txt(j.canNacimiento)
-document.getElementById("parroquia").innerText=txt(j.parNacimiento)
+document.getElementById("provincia").innerText=provincias[j.provNacimiento] || "No disponible"
+document.getElementById("canton").innerText="Código "+txt(j.canNacimiento)
+document.getElementById("parroquia").innerText="Código "+txt(j.parNacimiento)
 
-document.getElementById("prov_dom").innerText=provincias[j.provDomicilio] || j.provDomicilio
-document.getElementById("can_dom").innerText=txt(j.canDomicilio)
-document.getElementById("par_dom").innerText=txt(j.parDomicilio)
+document.getElementById("prov_dom").innerText=provincias[j.provDomicilio] || "No disponible"
+document.getElementById("can_dom").innerText="Código "+txt(j.canDomicilio)
+document.getElementById("par_dom").innerText="Código "+txt(j.parDomicilio)
 
 document.getElementById("estado_civil").innerText=estadoCivil[j.estadoCivilId] || "No disponible"
 document.getElementById("nacionalidad").innerText="ECUATORIANA"
