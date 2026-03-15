@@ -2,467 +2,285 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Cédula Ecuador</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f2f5;
-            color: #333;
-        }
+<title>Consulta Cédula Ecuador | Grupo Consulteg</title>
 
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
+<style>
 
-        h1 {
-            color: #003366;
-            margin-bottom: 24px;
-            font-size: 1.6rem;
-            border-bottom: 3px solid #003366;
-            padding-bottom: 10px;
-        }
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+margin:0;
+padding:0;
+}
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+header{
+background:#0d1b2a;
+color:white;
+padding:20px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #444;
-            font-size: 0.9rem;
-        }
+.container{
+max-width:900px;
+margin:30px auto;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px 12px;
-            font-size: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            transition: border-color 0.2s;
-        }
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:16px;
+}
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #003366;
-        }
+button{
+margin-top:10px;
+width:100%;
+padding:12px;
+background:#1e3c72;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
 
-        input[type="text"]:disabled {
-            background-color: #f5f5f5;
-            color: #555;
-        }
+button:hover{
+background:#2a5298;
+}
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:20px;
+}
 
-        #statusMessage {
-            margin: 16px 0;
-            padding: 12px 16px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            display: none;
-        }
+.card{
+background:#f5f5f5;
+padding:15px;
+border-radius:8px;
+}
 
-        #statusMessage.info {
-            background-color: #e8f0fe;
-            border: 1px solid #4285f4;
-            color: #1a56db;
-            display: block;
-        }
+.card h3{
+margin-top:0;
+border-bottom:1px solid #ddd;
+padding-bottom:5px;
+}
 
-        #statusMessage.success {
-            background-color: #e6f4ea;
-            border: 1px solid #34a853;
-            color: #1e7e34;
-            display: block;
-        }
+.data{
+margin:5px 0;
+}
 
-        #statusMessage.error {
-            background-color: #fce8e6;
-            border: 1px solid #ea4335;
-            color: #c0392b;
-            display: block;
-        }
+textarea{
+width:100%;
+height:200px;
+margin-top:20px;
+}
 
-        #statusMessage.loading {
-            background-color: #fff8e1;
-            border: 1px solid #f9a825;
-            color: #856404;
-            display: block;
-        }
+.success{
+color:green;
+font-weight:bold;
+}
 
-        .spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid #856404;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
+.error{
+color:red;
+font-weight:bold;
+}
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+</style>
 
-        details {
-            margin-top: 20px;
-        }
-
-        summary {
-            cursor: pointer;
-            font-weight: bold;
-            color: #003366;
-            font-size: 0.9rem;
-            padding: 8px 0;
-        }
-
-        textarea {
-            width: 100%;
-            height: 260px;
-            resize: vertical;
-            font-family: monospace;
-            font-size: 13px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-top: 8px;
-            background-color: #fafafa;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            background-color: #003366;
-            color: #fff;
-            margin-left: 6px;
-            vertical-align: middle;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>API Cédula Ecuador <span class="badge">v2</span></h1>
 
-        <div class="form-group">
-            <label for="cedulaInput">Cédula de identidad (10 dígitos):</label>
-            <input type="text" id="cedulaInput" maxlength="10" placeholder="Ej: 1712345678"
-                autocomplete="off" inputmode="numeric" />
-        </div>
+<header>
+Consulta Cédula Ecuador 🇪🇨 | Grupo Consulteg
+</header>
 
-        <div id="statusMessage"></div>
+<div class="container">
 
-        <div class="grid-2">
-            <div class="form-group">
-                <label for="nombreInput">Nombres:</label>
-                <input type="text" id="nombreInput" placeholder="—" disabled />
-            </div>
-            <div class="form-group">
-                <label for="apellidoInput">Apellidos:</label>
-                <input type="text" id="apellidoInput" placeholder="—" disabled />
-            </div>
-            <div class="form-group">
-                <label for="provinciaInput">Provincia de emisión:</label>
-                <input type="text" id="provinciaInput" placeholder="—" disabled />
-            </div>
-            <div class="form-group">
-                <label for="fechaNacInput">Fecha de nacimiento:</label>
-                <input type="text" id="fechaNacInput" placeholder="—" disabled />
-            </div>
-            <div class="form-group">
-                <label for="generoInput">Género:</label>
-                <input type="text" id="generoInput" placeholder="—" disabled />
-            </div>
-            <div class="form-group">
-                <label for="estadoCivilInput">Estado civil:</label>
-                <input type="text" id="estadoCivilInput" placeholder="—" disabled />
-            </div>
-        </div>
+<label>Ingrese cédula</label>
+<input id="cedula" maxlength="10" placeholder="Ej: 1726878505">
 
-        <details>
-            <summary>Respuesta completa del servidor (JSON)</summary>
-            <textarea id="responseText" placeholder="Aquí se mostrará la información completa del servidor"
-                readonly></textarea>
-        </details>
-    </div>
+<button onclick="consultar()">Consultar</button>
 
-    <script>
-        // ─── Mapas de datos ──────────────────────────────────────────────
-        const PROVINCIAS = {
-            '01': 'Azuay',
-            '02': 'Bolívar',
-            '03': 'Cañar',
-            '04': 'Carchi',
-            '05': 'Cotopaxi',
-            '06': 'Chimborazo',
-            '07': 'El Oro',
-            '08': 'Esmeraldas',
-            '09': 'Guayas',
-            '10': 'Imbabura',
-            '11': 'Loja',
-            '12': 'Los Ríos',
-            '13': 'Manabí',
-            '14': 'Morona Santiago',
-            '15': 'Napo',
-            '16': 'Pastaza',
-            '17': 'Pichincha',
-            '18': 'Tungurahua',
-            '19': 'Zamora Chinchipe',
-            '20': 'Galápagos',
-            '21': 'Sucumbíos',
-            '22': 'Orellana',
-            '23': 'Santo Domingo de los Tsáchilas',
-            '24': 'Santa Elena',
-            '30': 'Municipio del Distrito Metropolitano de Quito'
-        };
+<div id="estado"></div>
 
-        const GENEROS = {
-            'M': 'Masculino',
-            'F': 'Femenino',
-            'I': 'Indefinido',
-            'm': 'Masculino',
-            'f': 'Femenino'
-        };
+<div class="grid">
 
-        const ESTADOS_CIVILES = {
-            'S': 'Soltero/a',
-            'C': 'Casado/a',
-            'D': 'Divorciado/a',
-            'V': 'Viudo/a',
-            'U': 'Unión de hecho',
-            'X': 'No aplica'
-        };
+<div class="card">
+<h3>Datos Personales</h3>
 
-        // ─── Validación de cédula ecuatoriana ────────────────────────────
-        function validarCedula(cedula) {
-            if (!/^\d{10}$/.test(cedula)) {
-                return { valida: false, mensaje: 'La cédula debe tener exactamente 10 dígitos numéricos.' };
-            }
+<div class="data"><b>Cédula:</b> <span id="cedula_r"></span></div>
+<div class="data"><b>Nombre completo:</b> <span id="nombre"></span></div>
+<div class="data"><b>Nombres:</b> <span id="nombres"></span></div>
+<div class="data"><b>Apellidos:</b> <span id="apellidos"></span></div>
+<div class="data"><b>Sexo:</b> <span id="sexo"></span></div>
+<div class="data"><b>Edad:</b> <span id="edad"></span></div>
+<div class="data"><b>Fecha nacimiento:</b> <span id="nacimiento"></span></div>
 
-            const provincia = parseInt(cedula.substring(0, 2), 10);
-            if (provincia < 1 || (provincia > 24 && provincia !== 30)) {
-                return { valida: false, mensaje: 'El código de provincia en la cédula no es válido (01-24 o 30).' };
-            }
+</div>
 
-            const tercerDigito = parseInt(cedula[2], 10);
-            if (tercerDigito > 5) {
-                // Solo validamos personas naturales (3er dígito 0-5)
-                // 6 = sector público, 9 = persona jurídica (requieren distinta validación)
-                return { valida: true, mensaje: '' };
-            }
+<div class="card">
+<h3>Ubicación</h3>
 
-            // Algoritmo módulo 10 para personas naturales
-            const coeficientes = [2, 1, 2, 1, 2, 1, 2, 1, 2];
-            let suma = 0;
-            for (let i = 0; i < 9; i++) {
-                let valor = parseInt(cedula[i], 10) * coeficientes[i];
-                if (valor >= 10) valor -= 9;
-                suma += valor;
-            }
-            const digitoVerificador = parseInt(cedula[9], 10);
-            const calculado = (10 - (suma % 10)) % 10;
+<div class="data"><b>Provincia nacimiento:</b> <span id="provincia"></span></div>
+<div class="data"><b>Cantón nacimiento:</b> <span id="canton"></span></div>
+<div class="data"><b>Parroquia nacimiento:</b> <span id="parroquia"></span></div>
 
-            if (calculado !== digitoVerificador) {
-                return { valida: false, mensaje: 'La cédula no pasa la verificación de dígito de control.' };
-            }
+<div class="data"><b>Provincia domicilio:</b> <span id="prov_dom"></span></div>
+<div class="data"><b>Cantón domicilio:</b> <span id="can_dom"></span></div>
+<div class="data"><b>Parroquia domicilio:</b> <span id="par_dom"></span></div>
 
-            return { valida: true, mensaje: '' };
-        }
+</div>
 
-        // ─── Helpers para limpiar datos del API ──────────────────────────
-        function obtenerNombreProvincia(data, cedula) {
-            // Intenta obtenerlo del API; si viene como número/código, mapea al nombre
-            const raw = data.provincia || data.prov || data.cod_provincia || data.codigo_provincia;
-            if (raw !== undefined && raw !== null) {
-                const codigo = String(raw).padStart(2, '0');
-                if (PROVINCIAS[codigo]) return PROVINCIAS[codigo];
-                const nombre = String(raw).trim();
-                if (nombre.length > 2) return nombre; // Ya viene como nombre
-            }
-            // Fallback: extraer de la cédula
-            if (cedula && cedula.length >= 2) {
-                const codigo = cedula.substring(0, 2);
-                if (PROVINCIAS[codigo]) return PROVINCIAS[codigo];
-            }
-            return '';
-        }
+<div class="card">
+<h3>Información Civil</h3>
 
-        function formatearFecha(raw) {
-            if (!raw) return '';
-            const str = String(raw).trim();
-            // Formato YYYY-MM-DD → DD/MM/YYYY
-            if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-                const [y, m, d] = str.split('-');
-                return `${d}/${m}/${y}`;
-            }
-            // Formato YYYY-MM-DDTHH:mm:ss → DD/MM/YYYY
-            if (/^\d{4}-\d{2}-\d{2}T/.test(str)) {
-                const [y, m, d] = str.substring(0, 10).split('-');
-                return `${d}/${m}/${y}`;
-            }
-            return str;
-        }
+<div class="data"><b>Estado civil:</b> <span id="estado_civil"></span></div>
+<div class="data"><b>Nacionalidad:</b> <span id="nacionalidad"></span></div>
+<div class="data"><b>Profesión:</b> <span id="profesion"></span></div>
+<div class="data"><b>Instrucción:</b> <span id="instruccion"></span></div>
+<div class="data"><b>Fecha cedulación:</b> <span id="cedulacion"></span></div>
 
-        function obtenerGenero(data) {
-            const raw = data.sexo || data.genero || data.sex || data.gender || '';
-            const upper = String(raw).trim().toUpperCase();
-            return GENEROS[upper] || String(raw).trim();
-        }
+</div>
 
-        function obtenerEstadoCivil(data) {
-            const raw = data.estado_civil || data.estadoCivil || data.civil || '';
-            const upper = String(raw).trim().toUpperCase();
-            return ESTADOS_CIVILES[upper] || String(raw).trim();
-        }
+<div class="card">
+<h3>Familia</h3>
 
-        function limpiarTexto(str) {
-            if (!str) return '';
-            return String(str)
-                .trim()
-                .toLowerCase()
-                .replace(/\b\w/g, c => c.toUpperCase());
-        }
+<div class="data"><b>Padre:</b> <span id="padre"></span></div>
+<div class="data"><b>Madre:</b> <span id="madre"></span></div>
+<div class="data"><b>Cónyuge:</b> <span id="conyuge"></span></div>
 
-        // ─── Elementos del DOM ───────────────────────────────────────────
-        const cedulaInput    = document.getElementById('cedulaInput');
-        const nombreInput    = document.getElementById('nombreInput');
-        const apellidoInput  = document.getElementById('apellidoInput');
-        const provinciaInput = document.getElementById('provinciaInput');
-        const fechaNacInput  = document.getElementById('fechaNacInput');
-        const generoInput    = document.getElementById('generoInput');
-        const estadoCivilInput = document.getElementById('estadoCivilInput');
-        const responseText   = document.getElementById('responseText');
-        const statusMessage  = document.getElementById('statusMessage');
+</div>
 
-        function setStatus(type, html) {
-            statusMessage.className = type;
-            statusMessage.innerHTML = html;
-        }
+</div>
 
-        function clearResults() {
-            nombreInput.value    = '';
-            apellidoInput.value  = '';
-            provinciaInput.value = '';
-            fechaNacInput.value  = '';
-            generoInput.value    = '';
-            estadoCivilInput.value = '';
-            responseText.value   = '';
-        }
+<h3>Respuesta completa API</h3>
 
-        // ─── Petición al API ─────────────────────────────────────────────
-        async function buscarCedula(cedula) {
-            setStatus('loading', '<span class="spinner"></span>Consultando... por favor espera.');
-            clearResults();
+<textarea id="json"></textarea>
 
-            const proxyUrl = 'https://infoplacas.herokuapp.com/';
-            const targetUrl = 'https://si.secap.gob.ec/sisecap/logeo_web/json/busca_persona_registro_civil.php';
+</div>
 
-            const postData = new URLSearchParams({ documento: cedula, tipo: '1' });
+<script>
 
-            let data;
-            try {
-                const response = await fetch(proxyUrl + targetUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: postData
-                });
+const provincias={
+1:"Azuay",
+2:"Bolívar",
+3:"Cañar",
+4:"Carchi",
+5:"Cotopaxi",
+6:"Chimborazo",
+7:"El Oro",
+8:"Esmeraldas",
+9:"Guayas",
+10:"Imbabura",
+11:"Loja",
+12:"Los Ríos",
+13:"Manabí",
+14:"Morona Santiago",
+15:"Napo",
+16:"Pastaza",
+17:"Pichincha",
+18:"Tungurahua",
+19:"Zamora Chinchipe",
+20:"Galápagos",
+21:"Sucumbíos",
+22:"Orellana",
+23:"Santo Domingo",
+24:"Santa Elena"
+}
 
-                if (!response.ok) {
-                    throw new Error(`El servidor respondió con el código ${response.status}.`);
-                }
+const estadoCivil={
+1:"SOLTERO",
+2:"CASADO",
+3:"DIVORCIADO",
+4:"VIUDO",
+5:"UNIÓN DE HECHO",
+6:"SOLTERO"
+}
 
-                const textResponse = await response.text();
+function txt(v){
+return v ? v : "No disponible"
+}
 
-                if (!textResponse || !textResponse.trim()) {
-                    throw new Error('La respuesta del servidor está vacía.');
-                }
+async function consultar(){
 
-                try {
-                    data = JSON.parse(textResponse);
-                } catch (parseError) {
-                    throw new Error(`La respuesta del servidor no tiene formato JSON válido: ${parseError.message}`);
-                }
+const cedula=document.getElementById("cedula").value
 
-                responseText.value = JSON.stringify(data, null, 4);
+const proxy="https://infoplacas.herokuapp.com/"
+const url="https://si.secap.gob.ec/sisecap/logeo_web/json/busca_persona_registro_civil.php"
 
-            } catch (error) {
-                setStatus('error', `&#10060; Error al consultar: ${error.message}`);
-                return;
-            }
+const data=new URLSearchParams({
+documento:cedula,
+tipo:1
+})
 
-            // Verificar si hay datos útiles
-            if (!data || (Array.isArray(data) && data.length === 0)) {
-                setStatus('error', '&#10060; No se encontró información para esta cédula.');
-                return;
-            }
+try{
 
-            // Normalizar: a veces el API devuelve array
-            const persona = Array.isArray(data) ? data[0] : data;
+const res=await fetch(proxy+url,{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:data
+})
 
-            if (!persona || typeof persona !== 'object') {
-                setStatus('error', '&#10060; El formato de la respuesta no es el esperado.');
-                return;
-            }
+const text=await res.text()
 
-            // Poblar campos
-            nombreInput.value    = limpiarTexto(persona.nombres || persona.nombre || '');
-            apellidoInput.value  = limpiarTexto(persona.apellidos || persona.apellido || '');
-            provinciaInput.value = obtenerNombreProvincia(persona, cedula);
-            fechaNacInput.value  = formatearFecha(persona.fecha_nacimiento || persona.fechaNacimiento || persona.nacimiento || '');
-            generoInput.value    = obtenerGenero(persona);
-            estadoCivilInput.value = obtenerEstadoCivil(persona);
+document.getElementById("json").value=text
 
-            if (nombreInput.value || apellidoInput.value) {
-                setStatus('success', '&#10003; Datos obtenidos correctamente.');
-            } else {
-                setStatus('error', '&#10060; No se encontraron nombres/apellidos en la respuesta. Revisa la respuesta completa del servidor.');
-            }
-        }
+const j=JSON.parse(text)
 
-        // ─── Eventos ─────────────────────────────────────────────────────
-        cedulaInput.addEventListener('blur', () => {
-            const cedula = cedulaInput.value.trim();
+document.getElementById("estado").innerHTML="<p class='success'>Consulta realizada</p>"
 
-            if (!cedula) return;
+document.getElementById("cedula_r").innerText=txt(j.cedula)
+document.getElementById("nombre").innerText=txt(j.nombreCompleto)
+document.getElementById("nombres").innerText=txt(j.nombres)
+document.getElementById("apellidos").innerText=txt(j.apellidos)
+document.getElementById("sexo").innerText=txt(j.sexo)
+document.getElementById("edad").innerText=txt(j.edad)
+document.getElementById("nacimiento").innerText=txt(j.fechaNacimiento)
 
-            const { valida, mensaje } = validarCedula(cedula);
-            if (!valida) {
-                setStatus('error', `&#10060; ${mensaje}`);
-                clearResults();
-                return;
-            }
+document.getElementById("provincia").innerText=provincias[j.provNacimiento] || j.provNacimiento
+document.getElementById("canton").innerText=txt(j.canNacimiento)
+document.getElementById("parroquia").innerText=txt(j.parNacimiento)
 
-            buscarCedula(cedula);
-        });
+document.getElementById("prov_dom").innerText=provincias[j.provDomicilio] || j.provDomicilio
+document.getElementById("can_dom").innerText=txt(j.canDomicilio)
+document.getElementById("par_dom").innerText=txt(j.parDomicilio)
 
-        // Permitir solo dígitos al escribir
-        cedulaInput.addEventListener('input', () => {
-            cedulaInput.value = cedulaInput.value.replace(/\D/g, '');
-        });
-    </script>
+document.getElementById("estado_civil").innerText=estadoCivil[j.estadoCivilId] || "No disponible"
+document.getElementById("nacionalidad").innerText="ECUATORIANA"
+document.getElementById("profesion").innerText=txt(j.profesion)
+document.getElementById("instruccion").innerText=txt(j.instruccion)
+document.getElementById("cedulacion").innerText=txt(j.fechaCedulacion)
+
+document.getElementById("padre").innerText=txt(j.nombrePadre)
+document.getElementById("madre").innerText=txt(j.nombreMadre)
+document.getElementById("conyuge").innerText=txt(j.conyuge)
+
+}catch(e){
+
+document.getElementById("estado").innerHTML="<p class='error'>Error al consultar</p>"
+
+}
+
+}
+
+</script>
+
 </body>
 
 </html>
